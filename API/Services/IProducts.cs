@@ -1,4 +1,5 @@
 ﻿using API.Entities;
+using API.ViewModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +13,14 @@ namespace API.Services
         Task<ProductsModel> CreateProduct(ProductsModel newproduct);
         Task<IEnumerable> GetProducts();
         Task<ProductsModel> GetProductById(int Productid);
-        Task<ProductsModel> UpdateProduct(ProductsModel product);
-        Task<ProductsModel> DeleteProduct(int ProductId); 
+        Task<ProductsModel> UpdateProduct(ProductDto product);
+        Task<ProductsModel> DeleteProduct(int ProductId);
+        Task<IEnumerable<ProductsModel>> Search(string ProductName);
+        Task<IEnumerable> GetElectronicsProducts();
+        Task<IEnumerable> GetClothesProducts();
+        Task<ProductRating> StarRatting(ProductRating model);
+        Task<ProductinCart> AddToCart(ProductinCart model);
+        Task<IEnumerable> ListProductsinCart();
+
     }
 }

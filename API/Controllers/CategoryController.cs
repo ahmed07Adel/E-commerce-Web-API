@@ -27,7 +27,7 @@ namespace API.Controllers
             {
                 return Ok(await Crepo.GetCategories());
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data");

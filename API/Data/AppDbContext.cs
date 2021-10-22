@@ -13,9 +13,13 @@ namespace API.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<ProductsModel> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductinCart> Productincarts { get; set; }
+        public DbSet<ProductRating> productRatings { get; set; }
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        { }
+        { 
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,7 +30,6 @@ namespace API.Data
             builder.Entity<Category>().HasData(
                new Category { Id = 2, Name = "Electronics" }
                );
-            //builder.Entity<ProductsModel>().HasOne(a => a.Categories).WithMany(p => p.Products).OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(builder);
 
         }

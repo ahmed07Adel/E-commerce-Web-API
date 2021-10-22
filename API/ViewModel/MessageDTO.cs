@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace API.ViewModel
 {
-    public static class RolesModel
+    public class MessageDTO
     {
-        public const string user = "User";
-        public const string admin = "admin";
+        public string Message { get; set; }
+        public string User { get; set; }
     }
 }

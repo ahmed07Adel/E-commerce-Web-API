@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210522030628_Img")]
+    partial class Img
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,71 +135,6 @@ namespace API.Migrations
                     b.HasKey("EmployeeId");
 
                     b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("API.Entities.ProductRating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductsModelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rate")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("ProductsModelId");
-
-                    b.ToTable("productRatings");
-                });
-
-            modelBuilder.Entity("API.Entities.ProductinCart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("AddTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("productsModelId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("productsModelId");
-
-                    b.ToTable("Productincarts");
                 });
 
             modelBuilder.Entity("API.Entities.ProductsModel", b =>
@@ -360,36 +297,6 @@ namespace API.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("API.Entities.ProductRating", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", "AppUser")
-                        .WithMany("rattings")
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("API.Entities.ProductsModel", "ProductsModel")
-                        .WithMany("rattings")
-                        .HasForeignKey("ProductsModelId");
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("ProductsModel");
-                });
-
-            modelBuilder.Entity("API.Entities.ProductinCart", b =>
-                {
-                    b.HasOne("API.Entities.AppUser", "AppUser")
-                        .WithMany("ProductinCarts")
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("API.Entities.ProductsModel", "productsModel")
-                        .WithMany("ProductinCarts")
-                        .HasForeignKey("productsModelId");
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("productsModel");
-                });
-
             modelBuilder.Entity("API.Entities.ProductsModel", b =>
                 {
                     b.HasOne("API.Entities.Category", "Category")
@@ -450,23 +357,9 @@ namespace API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("API.Entities.AppUser", b =>
-                {
-                    b.Navigation("ProductinCarts");
-
-                    b.Navigation("rattings");
-                });
-
             modelBuilder.Entity("API.Entities.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("API.Entities.ProductsModel", b =>
-                {
-                    b.Navigation("ProductinCarts");
-
-                    b.Navigation("rattings");
                 });
 #pragma warning restore 612, 618
         }

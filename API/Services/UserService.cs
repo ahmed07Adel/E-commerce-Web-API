@@ -66,12 +66,10 @@ namespace API.Services
                     Errors = result.Errors.Select(e => e.Description)
                 };
             }
-
+       
         public async Task<UserManagerResponse> LoginUser(LoginViewModel model)
         {
-         
 
-            
             var user = await usermanager.FindByEmailAsync(model.Email);
             if(user == null)
             {
@@ -97,15 +95,18 @@ namespace API.Services
                 };
                 var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSetting:Key"]));
                 var token = new JwtSecurityToken(issuer: configuration["AuthSetting:Issuer"], audience:configuration["AuthSetting:Audience"],
-                    
                    claims:claims, expires: DateTime.Now.AddDays(30), signingCredentials: new SigningCredentials(Key, SecurityAlgorithms.HmacSha256));
                 string tokenAsString = new JwtSecurityTokenHandler().WriteToken(token);
+
             return new UserManagerResponse
             {
                 Message = tokenAsString,
                 IsSuccess = true,
-                ExpireDate = token.ValidTo
+                ExpireDate = token.ValidTo,
+                UserId = user.Id,
+                
             };
+          
 
             }
 

@@ -25,7 +25,7 @@ namespace API.Services
                 var basicAuthenticationInfo = new
                     System.Net.NetworkCredential("ahmedahemd123adel.007@gmail.com", "Ahmed.007.adel@");
                 mySmtpClient.Credentials = basicAuthenticationInfo;
-
+                //ahmedahemd123adel.007@gmail.com
 
                 var fromEmail = new MailAddress("ahmedahemd123adel.007@gmail.com", displayNameFrom);
                 var toEmail = new MailAddress(to);

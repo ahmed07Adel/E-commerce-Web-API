@@ -8,5 +8,7 @@ namespace API.Entities
 {
     public class AppUser : IdentityUser
     {
+        public ICollection<ProductRating> rattings { get; set; }
+        public ICollection<ProductinCart> ProductinCarts { get; set; }
     }
 }

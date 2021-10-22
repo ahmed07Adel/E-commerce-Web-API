@@ -20,10 +20,8 @@ namespace API.Services
         public async Task<IEnumerable> GetCategories()
         {
             var res = await context.Categories.ToListAsync();
-
             return res;
         }
-
         public async Task<Category> GetCategorieById(int id)
         {
             var res = await context.Categories.FirstOrDefaultAsync(x=>x.Id == id);
