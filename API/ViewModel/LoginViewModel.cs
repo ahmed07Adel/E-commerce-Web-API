@@ -15,5 +15,6 @@ namespace API.ViewModel
         [StringLength(50, MinimumLength = 5)]
         public string Password { get; set; }
         public bool RememberMe { get; set; }
+        public string RoleName { get; set; }
     }
 }

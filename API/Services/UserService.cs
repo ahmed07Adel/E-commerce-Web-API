@@ -92,6 +92,7 @@ namespace API.Services
                 {
                     new Claim("Email", model.Email),
                     new Claim(ClaimTypes.NameIdentifier, user.Id)
+                    
                 };
                 var Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSetting:Key"]));
                 var token = new JwtSecurityToken(issuer: configuration["AuthSetting:Issuer"], audience:configuration["AuthSetting:Audience"],

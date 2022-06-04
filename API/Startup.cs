@@ -3,6 +3,7 @@ using API.Entities;
 using API.HUB;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -84,8 +85,8 @@ namespace API
             });
             services.AddAuthorization(options =>
     options.AddPolicy("admin", policy => policy.RequireRole("admin"))
-);
-            services.Configure<FormOptions>(o => {
+            );
+services.Configure<FormOptions>(o => {
                 o.ValueLengthLimit = int.MaxValue;
                 o.MultipartBodyLengthLimit = int.MaxValue;
                 o.MemoryBufferThreshold = int.MaxValue;

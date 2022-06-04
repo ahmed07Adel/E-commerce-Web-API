@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using API.Entities;
@@ -29,9 +30,7 @@ namespace API.Controllers
             this.userservice = userservice;
             this.usermanager = usermanager;
             this._roleManager = _roleManager;
-        }
-       
-       
+        }      
         [HttpPost("Logout")]
         [ValidateAntiForgeryToken]
         public async Task Logout()
@@ -41,39 +40,31 @@ namespace API.Controllers
         }
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
-        {         
+        {
+            var userExist = await usermanager.FindByEmailAsync(model.Email);
+            if (userExist != null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "user Already Exist");
+            }
             AppUser user = new AppUser
             {
                 UserName = model.Email,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-
             };
-           
-            if (ModelState.IsValid)
+            var result = await usermanager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return StatusCode(StatusCodes.Status500InternalServerError, "check details");
+
+            if (!await _roleManager.RoleExistsAsync(RolesModel.user))
+                await _roleManager.CreateAsync(new IdentityRole(RolesModel.user));
+            if (!await _roleManager.RoleExistsAsync(RolesModel.admin))
+                await _roleManager.CreateAsync(new IdentityRole(RolesModel.admin));
+            if (await _roleManager.RoleExistsAsync(RolesModel.user))
             {
-                var result = await userservice.RegisterUser(model);
-
-
-                if (result.IsSuccess)
-                {
-                    //EmailService.SendEmail("ahmedahemd123adel.007@gmail.com", "EmailConfirmation", "<a href=\"" + ConfirmationLink "\">Confirm Registration", true, User.Identity.Name);
-                    await _roleManager.CreateAsync(new IdentityRole(RolesModel.user));
-                    return Ok(result);
-
-                }
-                //if (result.IsSuccess)
-                //{
-                //    return (IActionResult)res2;
-
-                //}
-
-                else
-                {
-                    return BadRequest(result);
-                }
+                await usermanager.AddToRoleAsync(user, RolesModel.user);
             }
-            return BadRequest("some thing not valid");
+            return Ok();
         }
         [HttpPost]
         [Route("AdminRegister")]
@@ -105,8 +96,6 @@ namespace API.Controllers
             }
             return Ok();
         }
-
-
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody]LoginViewModel model)
         {

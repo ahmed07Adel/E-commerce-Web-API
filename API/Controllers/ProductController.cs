@@ -3,6 +3,7 @@ using API.Services;
 using API.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System;
@@ -16,13 +17,15 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
-        private readonly IProducts productsRepo;
-
-        public ProductController(IProducts productsRepo)
+        private readonly IProducts productsRepo;       
+        private readonly RoleManager<IdentityRole> _roleManager;
+        public ProductController(IProducts productsRepo, RoleManager<IdentityRole> _roleManager)
         {
             this.productsRepo = productsRepo;
+            this._roleManager = _roleManager;
         }
         [HttpPost("AddToCart")]
         public async Task<ActionResult<ProductinCart>> AddToCart(AddToCartViewModel model)
@@ -81,7 +84,7 @@ namespace API.Controllers
             }
         }
 
-            [HttpGet("GetClothesProducts")]
+        [HttpGet("GetClothesProducts")]
         public async Task<IActionResult> GetClothesProducts()
         {
             try
@@ -167,51 +170,49 @@ namespace API.Controllers
         }
         [HttpPost]
         [Route("CreateProduct")]
-        //[Authorize(Policy = "admin")]
         public async Task<ActionResult<ProductsModel>> CreateProduct([FromForm]ProductDto model)
         {
           
             try
             {
-
                 if (model == null)
-                {
-                    return BadRequest();
-                }
-                var foldername = Path.Combine("Resources", "Images");
-                var savefolder = Path.Combine(Directory.GetCurrentDirectory(), foldername);
-                var dbPath = string.Empty;
-                if (model.Picture.Length > 0)
-                {
-                    var filename = ContentDispositionHeaderValue.Parse(model.Picture.ContentDisposition).FileName.ToString();
-                    var fullpath = Path.Combine(savefolder, filename);
-                    dbPath = Path.Combine(foldername, filename);
-
-                    using (var stream = new FileStream(fullpath, FileMode.Create))
                     {
-                        model.Picture.CopyTo(stream);
+                        return BadRequest();
                     }
-                  
+                    var foldername = Path.Combine("Resources", "Images");
+                    var savefolder = Path.Combine(Directory.GetCurrentDirectory(), foldername);
+                    var dbPath = string.Empty;
+                    if (model.Picture.Length > 0)
+                    {
+                        var filename = ContentDispositionHeaderValue.Parse(model.Picture.ContentDisposition).FileName.ToString();
+                        var fullpath = Path.Combine(savefolder, filename);
+                        dbPath = Path.Combine(foldername, filename);
 
-                }
-                model.ProductPic = dbPath;
-                var entity = new ProductsModel
-                {
-                    ProductPic = model.ProductPic,
-                    ProductName = model.ProductName,
-                    Description = model.Description,
-                    Price = model.Price,
-                    Category = model.Category
-                };
-                var res = await productsRepo.CreateProduct(entity);
-                //if (!User.IsInRole("admin"))
-                //{
-                //    return BadRequest();
-                //}
-               
+                        using (var stream = new FileStream(fullpath, FileMode.Create))
+                        {
+                            model.Picture.CopyTo(stream);
+                        }
+
+
+                    }
+                    model.ProductPic = dbPath;
+                    var entity = new ProductsModel
+                    {
+                        ProductPic = model.ProductPic,
+                        ProductName = model.ProductName,
+                        Description = model.Description,
+                        Price = model.Price,
+                        Category = model.Category
+                    };
+                    var res = await productsRepo.CreateProduct(entity);
+                    //if (!User.IsInRole("admin"))
+                    //{
+                    //    return BadRequest();
+                    //}
+
                     return res;
-                
-              
+
+               
 
             }
             catch (Exception)
@@ -220,6 +221,7 @@ namespace API.Controllers
 
             }
         }
+
         [HttpGet("GetProductById/{id:int}")]
         public async Task<ActionResult<ProductsModel>> GetProductById(int id)
         {
@@ -303,11 +305,8 @@ namespace API.Controllers
           
             catch (Exception)
             {
-
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error deleting data");
-               
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error deleting data");              
             }
         }
-
     }
 }
