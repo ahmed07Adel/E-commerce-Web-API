@@ -46,6 +46,7 @@ namespace API
             services.AddScoped<ICategory, CategoryRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddScoped<IGenderRepository, GenderRepository>();
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("Conn"));

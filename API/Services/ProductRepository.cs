@@ -30,30 +30,22 @@ namespace API.Services
             await context.SaveChangesAsync();
             return res.Entity;
         }
-
         public async Task<ProductsModel> GetProductById(int Productid)
-        {
-          
+        {         
             var res = await context.Products.FirstOrDefaultAsync(x => x.Id == Productid);
             return res;
         }
-
         public async Task<IEnumerable> GetProducts()
-        {
-           
+        {          
             var res = await context.Products.Include(a => a.Category).ToListAsync();
             return res;
         }
-
         public async Task<ProductsModel> UpdateProduct(ProductDto product)
         {
-
             var res = await context.Products.FirstOrDefaultAsync(x => x.Id == product.Id);
             context.Entry(product.Category).State = EntityState.Unchanged;
-
             if (res != null)
-            {
-              
+            {             
                 res.Price = product.Price;
                 res.ProductName = product.ProductName;
                 res.Description = product.Description;
@@ -72,7 +64,7 @@ namespace API.Services
                 context.Products.Remove(res);
                 await context.SaveChangesAsync();
                 return res;
-            }
+            }   
             return null;
         }
 

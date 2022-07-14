@@ -24,13 +24,21 @@ namespace API.Controllers
         private readonly IUserService userservice;
         private readonly UserManager<AppUser> usermanager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IGenderRepository genderRepository;
 
-        public AccountController(IUserService userservice, UserManager<AppUser> usermanager, RoleManager<IdentityRole> _roleManager)
+        public AccountController(IUserService userservice, UserManager<AppUser> usermanager, 
+            RoleManager<IdentityRole> _roleManager, IGenderRepository genderRepository)
         {
             this.userservice = userservice;
             this.usermanager = usermanager;
             this._roleManager = _roleManager;
-        }      
+            this.genderRepository=genderRepository;
+        }    
+        [HttpGet("GenderDropDownList")]
+        public async Task<IActionResult> GenderDropDownList()
+        {
+          return Ok(await genderRepository.GenderDropDownList());  
+        }
         [HttpPost("Logout")]
         [ValidateAntiForgeryToken]
         public async Task Logout()
@@ -47,7 +55,9 @@ namespace API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "user Already Exist");
             }
             AppUser user = new AppUser
-            {
+            {  
+                Active = model.Active,  
+                GenderId = model.GenderId,
                 UserName = model.Email,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),

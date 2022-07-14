@@ -5,8 +5,7 @@ using System.Linq;
 namespace API.Entities
 {
     public class ProductsModel
-    {
-       
+    {      
         public int Id { get; set; }
         public string ProductName { get; set; }
         public string Description { get; set; }
@@ -15,6 +14,5 @@ namespace API.Entities
         public Category Category { get; set; }
         public ICollection<ProductRating> rattings { get; set; }
         public ICollection<ProductinCart> ProductinCarts { get; set; }
-
     }
 }

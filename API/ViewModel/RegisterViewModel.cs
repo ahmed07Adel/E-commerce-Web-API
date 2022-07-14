@@ -19,5 +19,7 @@ namespace API.ViewModel
         [StringLength(50, MinimumLength =5)]
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
+        public int GenderId { get; set; }
+        public bool Active { get; set; }
     }
 }
