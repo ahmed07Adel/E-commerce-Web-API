@@ -35,9 +35,12 @@ namespace API.Services
             var res = await context.Products.FirstOrDefaultAsync(x => x.Id == Productid);
             return res;
         }
-        public async Task<IEnumerable> GetProducts()
-        {          
-            var res = await context.Products.Include(a => a.Category).ToListAsync();
+        public async Task<IEnumerable> GetProducts(APIJWT.Specifications.ParameterSpecification parameterSpecification)
+        {
+            var res = await context.Products.Include(a => a.Category).
+                 Skip((parameterSpecification.PageNumber -1) * parameterSpecification.PageSize)
+                 .Take(parameterSpecification.PageSize)
+                 .ToListAsync();
             return res;
         }
         public async Task<ProductsModel> UpdateProduct(ProductDto product)

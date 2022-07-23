@@ -241,11 +241,11 @@ namespace API.Controllers
             }
         }
         [HttpGet("GetAllProducts")]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts([FromQuery] APIJWT.Specifications.ParameterSpecification parameterSpecification)
         {
             try
             {
-                return Ok(await productsRepo.GetProducts());
+                return Ok(await productsRepo.GetProducts(parameterSpecification));
             }
             catch (Exception)
             {

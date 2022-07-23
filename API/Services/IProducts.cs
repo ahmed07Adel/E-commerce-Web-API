@@ -11,7 +11,7 @@ namespace API.Services
    public interface IProducts
     {
         Task<ProductsModel> CreateProduct(ProductsModel newproduct);
-        Task<IEnumerable> GetProducts();
+        Task<IEnumerable> GetProducts(APIJWT.Specifications.ParameterSpecification parameterSpecification);
         Task<ProductsModel> GetProductById(int Productid);
         Task<ProductsModel> UpdateProduct(ProductDto product);
         Task<ProductsModel> DeleteProduct(int ProductId);
